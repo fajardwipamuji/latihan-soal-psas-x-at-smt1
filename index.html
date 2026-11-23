@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -44,12 +45,11 @@
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
-  <!-- ==================== HEADER UTAMA (STICKY) ==================== -->
+  <!-- ==================== HEADER UTAMA ==================== -->
   <header class="bg-gradient-to-r from-emerald-700 via-emerald-600 to-teal-600 text-white shadow-md sticky top-0 z-30 no-print">
     <div class="max-w-5xl mx-auto px-4 py-3.5 flex flex-wrap items-center justify-between gap-3">
       <div class="flex items-center gap-3">
         <div class="w-10 h-10 rounded-xl bg-white/15 backdrop-blur flex items-center justify-center border border-white/25 shrink-0">
-          <!-- Ikon Buku / Edukasi -->
           <svg class="w-6 h-6 text-emerald-100" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
           </svg>
@@ -60,10 +60,10 @@
         </div>
       </div>
 
-      <!-- Info Murid Aktif & Timer 60:00 (Muncul saat kuis berlangsung) -->
+      <!-- Info Murid & Timer (Muncul saat kuis berlangsung) -->
       <div id="header-quiz-info" class="hidden items-center gap-3">
         <div class="text-right">
-          <div id="header-murid-name" class="text-xs font-bold text-white leading-tight max-w-[150px] sm:max-w-[220px] truncate"></div>
+          <div id="header-murid-name" class="text-xs font-bold text-white leading-tight max-w-[140px] sm:max-w-[200px] truncate"></div>
           <div id="header-murid-class" class="text-[11px] text-emerald-100"></div>
         </div>
         <div id="timer-badge" class="flex items-center gap-1.5 bg-white/15 border border-white/25 px-3 py-1.5 rounded-xl font-mono text-sm font-bold transition-colors">
@@ -87,15 +87,15 @@
             Penilaian Sumatif Akhir Semester (PSAS) • Kelas X
           </span>
           <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 leading-snug">
-            Latihan PSAS Dasar-Dasar Agribisnis Ternak (DDAT) Kelas X — SMKN 2 Purbalingga (SMAKDA)
+            Latihan PSAS Dasar-Dasar Agribisnis Ternak (DDAT) Kelas X — SMKN 2 Purbalingga
           </h2>
           <p class="text-sm text-slate-600 mt-1.5">
-            Selamat datang, Murid SMKN 2 Purbalingga! Pilih Kelas dan Nama Lengkap Murid dari daftar resmi sebelum mengerjakan 30 soal latihan bervariasi.
+            Selamat datang, Murid SMKN 2 Purbalingga! Pilih kelas dan nama lengkap sebelum mengerjakan 30 soal latihan bervariasi.
           </p>
         </div>
 
         <form id="start-form" class="p-6 space-y-6" novalidate>
-          <!-- Ringkasan Info Soal, Waktu & KKM -->
+          <!-- Ringkasan Info Waktu & KKM -->
           <div class="grid grid-cols-3 gap-3 text-center">
             <div class="bg-slate-50 border border-slate-200 rounded-xl p-3">
               <div class="text-lg sm:text-xl font-extrabold text-emerald-700">30</div>
@@ -109,6 +109,24 @@
               <div class="text-lg sm:text-xl font-extrabold text-emerald-700">75</div>
               <div class="text-[11px] sm:text-xs text-slate-500 font-semibold">Standar KKM</div>
             </div>
+          </div>
+
+          <!-- Status Koneksi Database Spreadsheet -->
+          <div id="db-status-box" class="rounded-xl border px-4 py-3 text-xs font-medium flex flex-wrap items-center justify-between gap-2 bg-slate-50 border-slate-200 text-slate-700">
+            <div id="db-status-content" class="flex items-center gap-2">
+              <svg class="w-4 h-4 animate-spin text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+              </svg>
+              <span>Memuat daftar murid dari Spreadsheet...</span>
+            </div>
+            <button
+              type="button"
+              id="btn-reload-db"
+              class="px-2.5 py-1 rounded-lg bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 font-semibold transition"
+            >
+              Muat Ulang
+            </button>
           </div>
 
           <!-- Komposisi 5 Tipe Soal -->
@@ -157,11 +175,20 @@
               </select>
             </div>
 
-            <!-- 2. Dropdown Nama Lengkap Murid -->
+            <!-- 2. Dropdown Nama Lengkap Murid / Input Manual -->
             <div>
-              <label for="select-nama" class="block text-sm font-semibold text-slate-700 mb-1.5">
-                Nama Lengkap Murid <span class="text-rose-500">*</span>
-              </label>
+              <div class="flex items-center justify-between mb-1.5 gap-2">
+                <label id="label-nama" for="select-nama" class="block text-sm font-semibold text-slate-700">
+                  Nama Lengkap Murid <span class="text-rose-500">*</span>
+                </label>
+                <button
+                  type="button"
+                  id="btn-toggle-manual"
+                  class="text-[11px] font-semibold text-emerald-700 hover:text-emerald-800 hover:underline transition"
+                >
+                  Nama tidak ada? Ketik manual
+                </button>
+              </div>
               <select
                 id="select-nama"
                 disabled
@@ -170,6 +197,13 @@
               >
                 <option value="">-- Pilih Kelas terlebih dahulu --</option>
               </select>
+              <input
+                type="text"
+                id="input-nama-manual"
+                placeholder="Ketik nama lengkap murid..."
+                autocomplete="name"
+                class="hidden w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition"
+              />
             </div>
           </div>
 
@@ -309,6 +343,18 @@
 
     <!-- 3. HALAMAN HASIL & PEMBAHASAN -->
     <section id="view-result" class="hidden space-y-6">
+      <!-- Banner Status Penyimpanan Otomatis ke Spreadsheet -->
+      <div id="save-status-banner" class="hidden rounded-2xl border px-5 py-4 text-sm font-semibold flex flex-wrap items-center justify-between gap-3 shadow-xs no-print">
+        <div id="save-status-content" class="flex items-center gap-3"></div>
+        <button
+          id="btn-resend-score"
+          type="button"
+          class="hidden px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition shadow-xs"
+        >
+          Kirim Ulang Nilai
+        </button>
+      </div>
+
       <!-- Kartu Laporan Skor Utama -->
       <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden print-shadow-none">
         <div class="bg-gradient-to-r from-emerald-700 to-teal-600 text-white px-6 py-5">
@@ -430,7 +476,12 @@
   <!-- ==================== JAVASCRIPT APLIKASI KUIS ==================== -->
   <script>
     /**
-     * Data Resmi Murid Kelas X AT 1, X AT 2, dan X AT 3 (Total 104 Murid)
+     * Endpoint Google Apps Script (Database Daftar_Murid & Rekap_Nilai_Murid Kelas X)
+     */
+    const API_URL = "https://script.google.com/macros/s/AKfycbw_VwBMvxS0VWIjaFb8NxkMlrI3YjKVEHPK5MXY_7U2_EKJ-mzhS4UjWwWPkfPWFfNniw/exec";
+
+    /**
+     * Data Resmi Cadangan (Fallback) Murid Kelas X AT 1, X AT 2, dan X AT 3 (Total 104 Murid)
      */
     const DATA_MURID = {
       "X AT 1": [
@@ -952,6 +1003,10 @@
     ];
 
     // ==================== STATE APLIKASI ====================
+    let activeMuridData = { ...DATA_MURID };
+    let isManualNameMode = false;
+    let lastScorePayload = null;
+
     let muridNama = "";
     let muridKelas = "";
     let currentIndex = 0;
@@ -971,8 +1026,14 @@
     const timerBadge = document.getElementById("timer-badge");
 
     const startForm = document.getElementById("start-form");
+    const dbStatusBox = document.getElementById("db-status-box");
+    const dbStatusContent = document.getElementById("db-status-content");
+    const btnReloadDb = document.getElementById("btn-reload-db");
     const selectKelas = document.getElementById("select-kelas");
     const selectNama = document.getElementById("select-nama");
+    const inputNamaManual = document.getElementById("input-nama-manual");
+    const labelNama = document.getElementById("label-nama");
+    const btnToggleManual = document.getElementById("btn-toggle-manual");
     const startError = document.getElementById("start-error");
 
     const progressText = document.getElementById("progress-text");
@@ -995,23 +1056,73 @@
     const modalCancel = document.getElementById("modal-cancel");
     const modalOk = document.getElementById("modal-ok");
 
+    const saveStatusBanner = document.getElementById("save-status-banner");
+    const saveStatusContent = document.getElementById("save-status-content");
+    const btnResendScore = document.getElementById("btn-resend-score");
+
     const btnPrint = document.getElementById("btn-print");
     const btnRetry = document.getElementById("btn-retry");
 
-    // ==================== FUNGSI DROPDOWN BERJENJANG ====================
+    // ==================== FUNGSI DROPDOWN BERJENJANG & API ====================
 
     /**
-     * Memperbarui dropdown Nama Lengkap Murid berdasarkan Kelas yang dipilih
+     * Atur mode input nama: dropdown database vs ketik manual
+     */
+    function setManualNameMode(manual) {
+      isManualNameMode = manual;
+      if (manual) {
+        selectNama.classList.add("hidden");
+        selectNama.required = false;
+        inputNamaManual.classList.remove("hidden");
+        inputNamaManual.required = true;
+        labelNama.setAttribute("for", "input-nama-manual");
+        btnToggleManual.textContent = "Pilih dari daftar";
+      } else {
+        inputNamaManual.classList.add("hidden");
+        inputNamaManual.required = false;
+        selectNama.classList.remove("hidden");
+        selectNama.required = true;
+        labelNama.setAttribute("for", "select-nama");
+        btnToggleManual.textContent = "Nama tidak ada? Ketik manual";
+      }
+    }
+
+    /**
+     * Memperbarui dropdown Kelas sesuai data aktif
+     */
+    function populateKelasDropdown() {
+      const prevVal = selectKelas.value;
+      const kelasKeys = Object.keys(activeMuridData).sort((a, b) =>
+        a.localeCompare(b, "id", { numeric: true, sensitivity: "base" })
+      );
+
+      selectKelas.innerHTML = '<option value="">-- Pilih Kelas --</option>';
+      kelasKeys.forEach((kls) => {
+        const opt = document.createElement("option");
+        opt.value = kls;
+        opt.textContent = `${kls} (${activeMuridData[kls].length} Murid)`;
+        selectKelas.appendChild(opt);
+      });
+
+      if (prevVal && activeMuridData[prevVal]) {
+        selectKelas.value = prevVal;
+      }
+    }
+
+    /**
+     * Memperbarui dropdown Nama Lengkap Murid berdasarkan Kelas yang dipilih (urut alfabetis)
      */
     function updateNamaDropdown(kelas) {
       selectNama.innerHTML = "";
-      if (!kelas || !DATA_MURID[kelas]) {
+      if (!kelas || !activeMuridData[kelas]) {
         selectNama.disabled = true;
         selectNama.innerHTML = '<option value="">-- Pilih Kelas terlebih dahulu --</option>';
         return;
       }
 
-      const daftarNama = DATA_MURID[kelas];
+      const daftarNama = [...activeMuridData[kelas]].sort((a, b) =>
+        a.localeCompare(b, "id", { sensitivity: "base" })
+      );
       selectNama.disabled = false;
 
       const defaultOption = document.createElement("option");
@@ -1025,6 +1136,125 @@
         opt.textContent = nama;
         selectNama.appendChild(opt);
       });
+    }
+
+    /**
+     * Mengambil daftar kelas & nama murid dari Google Apps Script (GET) dengan fallback 104 murid resmi
+     */
+    async function loadMuridDatabase() {
+      dbStatusBox.className = "rounded-xl border px-4 py-3 text-xs font-medium flex flex-wrap items-center justify-between gap-2 bg-slate-50 border-slate-200 text-slate-700";
+      dbStatusContent.innerHTML = `
+        <svg class="w-4 h-4 animate-spin text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+        </svg>
+        <span>Memuat daftar murid dari Spreadsheet...</span>
+      `;
+
+      try {
+        const response = await fetch(API_URL, { method: "GET" });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const json = await response.json();
+
+        if (json.status !== "success" || !Array.isArray(json.data) || json.data.length === 0) {
+          throw new Error("Data murid di Spreadsheet kosong atau tidak valid.");
+        }
+
+        const grouped = {};
+        let totalCount = 0;
+        json.data.forEach((row) => {
+          const kls = String(row.kelas || "").trim();
+          const nm = String(row.nama || "").trim();
+          if (kls && nm) {
+            if (!grouped[kls]) grouped[kls] = [];
+            grouped[kls].push(nm);
+            totalCount++;
+          }
+        });
+
+        if (totalCount === 0) throw new Error("Tidak ada baris murid yang valid.");
+
+        activeMuridData = grouped;
+        populateKelasDropdown();
+        updateNamaDropdown(selectKelas.value);
+
+        dbStatusBox.className = "rounded-xl border px-4 py-3 text-xs font-medium flex flex-wrap items-center justify-between gap-2 bg-emerald-50 border-emerald-200 text-emerald-800";
+        dbStatusContent.innerHTML = `
+          <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span><strong>Terhubung ke Spreadsheet</strong> (${totalCount} murid)</span>
+        `;
+      } catch (err) {
+        console.warn("Menggunakan data cadangan lokal:", err);
+        activeMuridData = { ...DATA_MURID };
+        populateKelasDropdown();
+        updateNamaDropdown(selectKelas.value);
+
+        dbStatusBox.className = "rounded-xl border px-4 py-3 text-xs font-medium flex flex-wrap items-center justify-between gap-2 bg-amber-50 border-amber-200 text-amber-900";
+        dbStatusContent.innerHTML = `
+          <svg class="w-4 h-4 text-amber-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+          </svg>
+          <span><strong>Mode Offline / Cadangan</strong> (104 murid resmi siap dipilih)</span>
+        `;
+      }
+    }
+
+    /**
+     * Mengirim hasil nilai akhir murid ke Google Sheets (POST text/plain bebas CORS preflight)
+     */
+    async function sendScoreToSpreadsheet(payload) {
+      if (!payload) return;
+
+      saveStatusBanner.className = "rounded-2xl border px-5 py-4 text-sm font-semibold flex flex-wrap items-center justify-between gap-3 shadow-xs no-print bg-blue-50 border-blue-200 text-blue-800";
+      saveStatusContent.innerHTML = `
+        <svg class="w-5 h-5 animate-spin text-blue-600 shrink-0" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+        </svg>
+        <span>Sedang mengirim nilai ke Spreadsheet...</span>
+      `;
+      btnResendScore.classList.add("hidden");
+
+      try {
+        const response = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+
+        const rawText = await response.text();
+        let parsed = null;
+        try {
+          parsed = JSON.parse(rawText);
+        } catch (_) {}
+
+        if (!response.ok || (parsed && parsed.status === "error")) {
+          const msg = parsed && parsed.message ? parsed.message : `HTTP ${response.status}`;
+          throw new Error(msg);
+        }
+
+        saveStatusBanner.className = "rounded-2xl border px-5 py-4 text-sm font-semibold flex flex-wrap items-center justify-between gap-3 shadow-xs no-print bg-emerald-50 border-emerald-200 text-emerald-800";
+        saveStatusContent.innerHTML = `
+          <svg class="w-5 h-5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>Berhasil dikirim ke Spreadsheet! Nilai telah tersimpan otomatis.</span>
+        `;
+        btnResendScore.classList.add("hidden");
+      } catch (err) {
+        console.error("Gagal mengirim nilai ke Spreadsheet:", err);
+
+        saveStatusBanner.className = "rounded-2xl border px-5 py-4 text-sm font-semibold flex flex-wrap items-center justify-between gap-3 shadow-xs no-print bg-rose-50 border-rose-200 text-rose-800";
+        saveStatusContent.innerHTML = `
+          <svg class="w-5 h-5 text-rose-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+          </svg>
+          <span>Gagal mengirim nilai ke Spreadsheet (${err.message}). Silakan klik Kirim Ulang.</span>
+        `;
+        btnResendScore.classList.remove("hidden");
+      }
     }
 
     // ==================== FUNGSI UTILITAS KUIS ====================
@@ -1630,13 +1860,31 @@
       headerQuizInfo.classList.remove("flex");
       viewResult.classList.remove("hidden");
       window.scrollTo({ top: 0, behavior: "smooth" });
+
+      // Siapkan payload sesuai Code.gs dan kirim otomatis ke Spreadsheet
+      lastScorePayload = {
+        namaMurid: muridNama,
+        kelas: muridKelas,
+        benarPG: breakdown.pg.correct,
+        benarBS: breakdown.bs.correct,
+        benarPGK: breakdown.pgk.correct,
+        benarIsian: breakdown.isian.correct,
+        benarJodoh: breakdown.jodoh.correct,
+        totalBenar: totalCorrect,
+        totalNilai: finalScore,
+        durasiMenit: Math.max(1, Math.round(usedSeconds / 60))
+      };
+
+      sendScoreToSpreadsheet(lastScorePayload);
     }
 
     // ==================== EVENT LISTENERS ====================
 
     // Dropdown berjenjang: Kelas -> Nama Lengkap Murid
     selectKelas.addEventListener("change", () => {
-      updateNamaDropdown(selectKelas.value);
+      if (!isManualNameMode) {
+        updateNamaDropdown(selectKelas.value);
+      }
       startError.classList.add("hidden");
     });
 
@@ -1644,13 +1892,42 @@
       startError.classList.add("hidden");
     });
 
+    inputNamaManual.addEventListener("input", () => {
+      startError.classList.add("hidden");
+    });
+
+    btnToggleManual.addEventListener("click", () => {
+      setManualNameMode(!isManualNameMode);
+      if (!isManualNameMode) {
+        updateNamaDropdown(selectKelas.value);
+      } else {
+        inputNamaManual.focus();
+      }
+      startError.classList.add("hidden");
+    });
+
+    btnReloadDb.addEventListener("click", loadMuridDatabase);
+
+    btnResendScore.addEventListener("click", () => {
+      if (lastScorePayload) {
+        sendScoreToSpreadsheet(lastScorePayload);
+      }
+    });
+
     // Mulai Kuis
     startForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const kelas = selectKelas.value.trim();
-      const nama = selectNama.value.trim();
+      const nama = isManualNameMode
+        ? inputNamaManual.value.trim()
+        : selectNama.value.trim();
 
       if (!kelas || !nama) {
+        startError.textContent = !kelas
+          ? "Mohon pilih Kelas terlebih dahulu."
+          : isManualNameMode
+            ? "Mohon ketik Nama Lengkap Murid terlebih dahulu."
+            : "Mohon pilih Nama Lengkap Murid dari daftar terlebih dahulu.";
         startError.classList.remove("hidden");
         return;
       }
@@ -1705,9 +1982,13 @@
 
     btnRetry.addEventListener("click", () => {
       viewResult.classList.add("hidden");
+      saveStatusBanner.classList.add("hidden");
       viewStart.classList.remove("hidden");
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
+
+    // Muat daftar murid dari Google Sheets saat halaman siap
+    document.addEventListener("DOMContentLoaded", loadMuridDatabase);
   </script>
 </body>
 </html>
